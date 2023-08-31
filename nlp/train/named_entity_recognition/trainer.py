@@ -18,7 +18,7 @@ def to_device(batch: Dict[str, Any], device: str) -> Dict[str, Any]:
     return {k: v.to(device) for k, v in batch.items()}
 
 
-def load_dataset(train_dataset_path: str, valid_dataset_path: str) -> tuple[NerOutputs, NerOutputs]:
+def load_dataset(train_dataset_path: str, valid_dataset_path: str) -> Tuple[NerOutputs, NerOutputs]:
     return (
         load_obj(path=train_dataset_path),
         load_obj(path=valid_dataset_path),
