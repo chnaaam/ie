@@ -2,8 +2,8 @@ from typing import Tuple
 
 import fire
 from kodali import NerOutputs
-from transformers import AutoTokenizer
 
+from nlp.tokenizers import KoCharElectraTokenizer
 from nlp.train.named_entity_recognition.preprocessor import Preprocessor
 from nlp.train.named_entity_recognition.trainer import Trainer
 
@@ -47,11 +47,11 @@ class NamedEntityRecognition:
         if not p.is_existed_cache():
             train_dataset, valid_dataset = NerOutputs(data=[]), NerOutputs(data=[])
 
-            if ai_hub_dataset_path:
-                td, vd = p.load_ai_hub(path=ai_hub_dataset_path, ratio=ratio)
+            # if ai_hub_dataset_path:
+            #     td, vd = p.load_ai_hub(path=ai_hub_dataset_path, ratio=ratio)
 
-                train_dataset += td
-                valid_dataset += vd
+            #     train_dataset += td
+            #     valid_dataset += vd
 
             if klue_dataset_path:
                 td, vd = p.load_klue(path=klue_dataset_path)
@@ -62,7 +62,7 @@ class NamedEntityRecognition:
             p.build(
                 train_dataset=train_dataset,  # type: ignore
                 valid_dataset=valid_dataset,  # type: ignore
-                tokenizer=AutoTokenizer.from_pretrained(tokenizer_name),
+                tokenizer=KoCharElectraTokenizer.from_pretrained(tokenizer_name),
                 max_seq_length=max_seq_length,
             )
 
