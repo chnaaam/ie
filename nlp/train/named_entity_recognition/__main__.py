@@ -47,11 +47,11 @@ class NamedEntityRecognition:
         if not p.is_existed_cache():
             train_dataset, valid_dataset = NerOutputs(data=[]), NerOutputs(data=[])
 
-            # if ai_hub_dataset_path:
-            #     td, vd = p.load_ai_hub(path=ai_hub_dataset_path, ratio=ratio)
+            if ai_hub_dataset_path:
+                td, vd = p.load_ai_hub(path=ai_hub_dataset_path, ratio=ratio)
 
-            #     train_dataset += td
-            #     valid_dataset += vd
+                train_dataset += td
+                valid_dataset += vd
 
             if klue_dataset_path:
                 td, vd = p.load_klue(path=klue_dataset_path)
