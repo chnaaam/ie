@@ -14,6 +14,7 @@ onnx = "^1.14.1"
 onnxruntime-gpu = "^1.15.1"
 seqeval = "^1.2.2"
 kodali = {path = "../kodali", develop = true}
+optimum = "^1.12.0"
 
 
 [build-system]

@@ -8,9 +8,9 @@ from kodali import NerAiHubLabels, NerOutputs
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from nlp.models.sequence_labeling import SequenceLabelingModel
 from nlp.train.named_entity_recognition.dataset import NerDataset
 from nlp.train.named_entity_recognition.metric import calc_f1_score
-from nlp.train.named_entity_recognition.models import SequenceLabelingModel
 from nlp.utils.io import get_project_path, load_obj
 
 
