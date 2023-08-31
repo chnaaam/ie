@@ -13,8 +13,8 @@ from nlp.tokenizers import KoCharElectraTokenizer
 
 TOKENIZER_NAME = "monologg/kocharelectra-base-discriminator"
 
-MODEL_NAME = "chnaaam/kocharelectra-ner"
-ONNX_MODEL_NAME = "chnaaam/kocharelectra-ner-onnx"
+HF_MODEL_NAME = "chnaaam/kocharelectra-ner"
+HF_ONNX_MODEL_NAME = "chnaaam/kocharelectra-ner-onnx"
 
 
 def decode(
@@ -61,7 +61,7 @@ class NerInferenceEngine:
     def __init__(self, device_id: int = 0) -> None:
         self.device = f"cuda:{device_id}" if device_id != -1 else "cpu"
 
-        self.model = SequenceLabelingModel(model_name=MODEL_NAME)
+        self.model = SequenceLabelingModel(model_name=HF_MODEL_NAME)
         self.model.eval()
         self.model = self.model.to(self.device)  # type: ignore
 
@@ -85,7 +85,7 @@ class NerInferenceEngine:
 
 class NerInferenceOnnxEngine:
     def __init__(self) -> None:
-        self.model = ORTModelForTokenClassification.from_pretrained(ONNX_MODEL_NAME)
+        self.model = ORTModelForTokenClassification.from_pretrained(HF_ONNX_MODEL_NAME)
         self.tokenizer = KoCharElectraTokenizer.from_pretrained(TOKENIZER_NAME)
 
     def run(self, sentence: str) -> List[NerOutput]:
