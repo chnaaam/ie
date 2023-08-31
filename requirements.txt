@@ -1,0 +1,6 @@
+transformers
+seqeval
+strenum
+fire
+onnx
+onnxruntime-gpu

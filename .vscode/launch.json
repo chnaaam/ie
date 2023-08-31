@@ -1,0 +1,62 @@
+{
+    // IntelliSense를 사용하여 가능한 특성에 대해 알아보세요.
+    // 기존 특성에 대한 설명을 보려면 가리킵니다.
+    // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: scripts/run_ner_preprocess",
+            "type": "python",
+            "request": "launch",
+            "module": "nlp.train.named_entity_recognition",
+            "justMyCode": true,
+            "args": [
+                "preprocess",
+                "--tokenizer_name",
+                "monologg/kocharelectra-base-discriminator",
+                "--max_seq_length",
+                "256",
+                "--ai_hub_dataset_path",
+                "/mnt/drive_d/Datasets/ner(ver1_0)",
+                "--klue_dataset_path",
+                "/mnt/drive_d/Datasets/klue-ner-v1.1",
+                "--reload",
+                "True"
+            ]
+        },
+        {
+            "name": "Python: scripts/run_ner_trainer",
+            "type": "python",
+            "request": "launch",
+            "module": "nlp.train.named_entity_recognition",
+            "justMyCode": true,
+            "args": [
+                "train",
+                "--model_name",
+                "monologg/kocharelectra-base-discriminator",
+                "--train_batch_size",
+                "48",
+                "--valid_batch_size",
+                "72",
+                "--num_epochs",
+                "5",
+                "--learning_rate",
+                "3e-5",
+                "--num_train_workers",
+                "4",
+                "--num_valid_workers",
+                "4",
+                "--device_id",
+                "0",
+                "--use_fp16",
+                "True",
+                "--betas",
+                "(0.9, 0.99)",
+                "--weight_decay",
+                "0.01",
+                "--seed",
+                "42",
+            ]
+        },
+    ]
+}

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "nlp"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+transformers = "^4.32.1"
+strenum = "^0.4.15"
+fire = "^0.5.0"
+onnx = "^1.14.1"
+onnxruntime-gpu = "^1.15.1"
+seqeval = "^1.2.2"
+kodali = {path = "../kodali", develop = true}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
