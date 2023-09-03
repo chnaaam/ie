@@ -4,11 +4,13 @@ from typing import Any, Dict, Tuple
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-from kodali import NerAiHubLabels, NerOutputs
+from kodali import NerOutputs
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from nlp.labels.named_entity_recognition.korean_corpus import NerKoreanCorpusLabels
 from nlp.models.sequence_labeling import SequenceLabelingModel
+from nlp.tokenizers import KoCharElectraTokenizer
 from nlp.train.named_entity_recognition.dataset import NerDataset
 from nlp.train.named_entity_recognition.metric import calc_f1_score
 from nlp.utils.io import get_project_path, load_obj
@@ -33,6 +35,7 @@ class Trainer:
         valid_batch_size: int,
         num_epochs: int,
         learning_rate: float,
+        max_seq_length: int = 256,
         num_train_workers: int = 0,
         num_valid_workers: int = 0,
         device_id: int = 0,
@@ -46,6 +49,8 @@ class Trainer:
 
         self.cache_dataset_path = os.path.join(get_project_path(), "ner", "dataset")
 
+        self.tokenizer = KoCharElectraTokenizer.from_pretrained(model_name)
+
         train_dataset, valid_dataset = load_dataset(
             train_dataset_path=os.path.join(self.cache_dataset_path, "ner.train"),
             valid_dataset_path=os.path.join(self.cache_dataset_path, "ner.valid"),
@@ -56,14 +61,22 @@ class Trainer:
         self.device = f"cuda:{device_id}" if device_id != -1 else "cpu"
 
         self.train_data_loader = DataLoader(
-            dataset=NerDataset(inputs=train_dataset),
+            dataset=NerDataset(
+                inputs=train_dataset,
+                tokenizer=self.tokenizer,
+                max_seq_length=max_seq_length,
+            ),
             batch_size=train_batch_size,
             shuffle=True,
             pin_memory=True,
             num_workers=num_train_workers,
         )
         self.valid_data_loader = DataLoader(
-            dataset=NerDataset(inputs=valid_dataset),
+            dataset=NerDataset(
+                inputs=valid_dataset,
+                tokenizer=self.tokenizer,
+                max_seq_length=max_seq_length,
+            ),
             batch_size=valid_batch_size,
             shuffle=False,
             pin_memory=True,
@@ -72,7 +85,7 @@ class Trainer:
 
         self.model = SequenceLabelingModel(
             model_name=model_name,
-            num_labels=NerAiHubLabels.SIZE,
+            num_labels=NerKoreanCorpusLabels.SIZE,
         )
 
         self.model = self.model.to(self.device)  # type: ignore
@@ -171,8 +184,8 @@ class Trainer:
                 score = calc_f1_score(
                     pred_y_list=pred_y_list,
                     true_y_list=true_y_list,
-                    idx2label=NerAiHubLabels.IDX2LABEL,
-                    pad_id=NerAiHubLabels.LABEL2IDX[NerAiHubLabels.PAD],
+                    idx2label=NerKoreanCorpusLabels.IDX2LABEL,
+                    pad_id=NerKoreanCorpusLabels.LABEL2IDX[NerKoreanCorpusLabels.PAD],
                 )
 
                 losses.append(loss.tolist())

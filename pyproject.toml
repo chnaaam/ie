@@ -13,13 +13,12 @@ fire = "^0.5.0"
 onnx = "^1.14.1"
 onnxruntime-gpu = "^1.15.1"
 seqeval = "^1.2.2"
-kodali = "^0.1.0"
 optimum = "^1.12.0"
+kodali = "^0.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
-kodali = { path = "../kodali", develop = true }
 
 [build-system]
 requires = ["poetry-core"]

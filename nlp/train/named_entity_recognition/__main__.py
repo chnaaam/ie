@@ -29,9 +29,7 @@ def fix_seed(seed):
 class NamedEntityRecognition:
     def preprocess(
         self,
-        tokenizer_name: str,
-        max_seq_length: int = 256,
-        ai_hub_dataset_path: str = "",
+        korean_corpus_dataset_path: str = "",
         klue_dataset_path: str = "",
         ratio: float = 0.9,
         reload: bool = False,
@@ -47,8 +45,8 @@ class NamedEntityRecognition:
         if not p.is_existed_cache():
             train_dataset, valid_dataset = NerOutputs(data=[]), NerOutputs(data=[])
 
-            if ai_hub_dataset_path:
-                td, vd = p.load_ai_hub(path=ai_hub_dataset_path, ratio=ratio)
+            if korean_corpus_dataset_path:
+                td, vd = p.load_korean_corpus(path=korean_corpus_dataset_path, ratio=ratio)
 
                 train_dataset += td
                 valid_dataset += vd
@@ -62,8 +60,6 @@ class NamedEntityRecognition:
             p.build(
                 train_dataset=train_dataset,  # type: ignore
                 valid_dataset=valid_dataset,  # type: ignore
-                tokenizer=KoCharElectraTokenizer.from_pretrained(tokenizer_name),
-                max_seq_length=max_seq_length,
             )
 
     def train(

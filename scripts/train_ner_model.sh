@@ -7,6 +7,7 @@ python3 -m nlp.train.named_entity_recognition train \
     --valid_batch_size 72 \
     --num_epochs 5 \
     --learning_rate 3e-5 \
+    --max_seq_length 256 \
     --num_train_workers 4 \
     --num_valid_workers 4 \
     --device_id 0 \

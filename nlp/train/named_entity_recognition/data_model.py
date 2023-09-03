@@ -1,10 +1,8 @@
 from dataclasses import dataclass
-from typing import Dict
-
-import torch
+from typing import List
 
 
 @dataclass
-class NerTensor:
-    inputs: Dict[str, torch.Tensor]
-    labels: torch.Tensor
+class NerInputs:
+    sentence: str
+    labels: List[int]
