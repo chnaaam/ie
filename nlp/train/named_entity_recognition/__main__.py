@@ -3,7 +3,6 @@ from typing import Tuple
 import fire
 from kodali import NerOutputs
 
-from nlp.tokenizers import KoCharElectraTokenizer
 from nlp.train.named_entity_recognition.preprocessor import Preprocessor
 from nlp.train.named_entity_recognition.trainer import Trainer
 
