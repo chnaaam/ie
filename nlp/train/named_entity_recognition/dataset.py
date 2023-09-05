@@ -18,7 +18,10 @@ def to_labels(label: str) -> str:
 
 class NerDataset(Dataset):
     def __init__(
-        self, inputs: Any, tokenizer: Union[PreTrainedTokenizer, PreTrainedTokenizerFast], max_seq_length: int = 256
+        self,
+        inputs: Any,
+        tokenizer: Union[PreTrainedTokenizer, PreTrainedTokenizerFast],
+        max_seq_length: int = 256,
     ):
         super().__init__()
 
