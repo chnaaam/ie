@@ -4,3 +4,4 @@ strenum
 fire
 onnx
 onnxruntime-gpu
+kodali

@@ -4,6 +4,14 @@
 from typing import Dict
 
 
+def to_korean_corpus_ner_labels(label: str) -> str:
+    if label == NerKoreanCorpusLabels.PAD:
+        return label
+
+    # B-OGG_POLITICS -> B-OG
+    return label[:4]
+
+
 class NerKoreanCorpusLabels:
     SIZE: int = 62
     PAD = "[PAD]"

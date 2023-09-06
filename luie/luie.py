@@ -1,16 +1,12 @@
 from typing import List
 
-from nlp.engines.named_entity_recognition.engine import (
-    NerInferenceEngine,
-    NerInferenceOnnxEngine,
-)
-from nlp.engines.named_entity_recognition.output import NerOutput
+from luie.modules.ner_module import NerInferenceEngineModule, NerOutput
 
 
-class NlpEngine:
+class LuieEngine:
     def __init__(self, task: str, device_id: int = 0, use_onnx: bool = False) -> None:
         if task == "ner":
-            self.module = NerInferenceEngine() if not use_onnx else NerInferenceOnnxEngine()
+            self.module = NerInferenceEngineModule()
         else:
             raise ValueError("Unsupported task. 'ner' task is currently supported.")
 

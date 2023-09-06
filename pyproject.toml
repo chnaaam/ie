@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "nlp"
-version = "0.1.0"
+name = "luie"
+version = "0.2.1"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
@@ -10,10 +10,7 @@ python = "^3.8"
 transformers = "^4.32.1"
 strenum = "^0.4.15"
 fire = "^0.5.0"
-onnx = "^1.14.1"
-onnxruntime-gpu = "^1.15.1"
 seqeval = "^1.2.2"
-optimum = "^1.12.0"
 kodali = "^0.3.0"
 
 

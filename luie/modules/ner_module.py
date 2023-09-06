@@ -1,20 +1,27 @@
 # type : ignore
+from dataclasses import dataclass
 from typing import List, Union
 
 import torch
 import torch.nn.functional as F
-from kodali import NerAiHubLabels, NerTags
-from optimum.onnxruntime import ORTModelForTokenClassification
+from kodali import NerTags
 from transformers import PreTrainedTokenizer, PreTrainedTokenizerFast
 
-from nlp.engines.named_entity_recognition.output import NerOutput
-from nlp.models.sequence_labeling import SequenceLabelingModel
-from nlp.tokenizers import KoCharElectraTokenizer
+from luie.labels.named_entity_recognition.korean_corpus import NerKoreanCorpusLabels
+from luie.models.sequence_labeling import SequenceLabelingModel
+from luie.tokenizers import KoCharElectraTokenizer
 
 TOKENIZER_NAME = "monologg/kocharelectra-base-discriminator"
 
 HF_MODEL_NAME = "chnaaam/kocharelectra-ner"
-HF_ONNX_MODEL_NAME = "chnaaam/kocharelectra-ner-onnx"
+
+
+@dataclass
+class NerOutput:
+    word: str
+    label: str
+    start_idx: int
+    end_idx: int
 
 
 def decode(
@@ -36,7 +43,10 @@ def decode(
                 )
             )
         if label.startswith(str(NerTags.BEGIN)):
-            buffer = {"idx": idx, "label": label.replace(f"{str(NerTags.BEGIN)}-", "")}
+            buffer = {
+                "idx": idx,
+                "label": label.replace(f"{str(NerTags.BEGIN)}-", ""),
+            }
         elif label.startswith(str(NerTags.END)):
             start_idx = buffer["idx"]
             label = buffer["label"]
@@ -57,7 +67,7 @@ def decode(
     return outputs
 
 
-class NerInferenceEngine:
+class NerInferenceEngineModule:
     def __init__(self, device_id: int = 0) -> None:
         self.device = f"cuda:{device_id}" if device_id != -1 else "cpu"
 
@@ -80,27 +90,7 @@ class NerInferenceEngine:
         outputs = decode(
             tokenizer=self.tokenizer,
             token_ids=encoded_inputs["input_ids"].tolist()[0][1:-1],  # Skip CLS and SEP tokens,
-            labels=[NerAiHubLabels.IDX2LABEL[str(o)] for o in outputs][1:-1],  # Skip CLS and SEP tokens,
-        )
-
-        return outputs
-
-
-class NerInferenceOnnxEngine:
-    def __init__(self) -> None:
-        self.model = ORTModelForTokenClassification.from_pretrained(HF_ONNX_MODEL_NAME)
-        self.tokenizer = KoCharElectraTokenizer.from_pretrained(TOKENIZER_NAME)
-
-    def run(self, sentence: str) -> List[NerOutput]:
-        inputs = self.tokenizer(sentence, return_tensors="pt")
-
-        outputs = self.model(**inputs)
-        outputs = torch.argmax(F.softmax(outputs.logits, dim=-1), dim=-1).tolist()[0]
-
-        outputs = decode(
-            tokenizer=self.tokenizer,
-            token_ids=inputs["input_ids"].tolist()[0][1:-1],  # Skip CLS and SEP tokens,
-            labels=[NerAiHubLabels.IDX2LABEL[str(o)] for o in outputs][1:-1],  # Skip CLS and SEP tokens,
+            labels=[NerKoreanCorpusLabels.IDX2LABEL[str(o)] for o in outputs][1:-1],  # Skip CLS and SEP tokens,
         )
 
         return outputs
